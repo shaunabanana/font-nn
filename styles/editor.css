@@ -1,0 +1,14 @@
+.main canvas {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, calc(-50% - 30px));
+}
+
+.main .toolbar {
+    position: absolute;
+    width: 100%;
+    bottom: 50px;
+    left: 50%;
+    transform: translate(-50%, 0);
+}

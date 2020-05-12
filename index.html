@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.25">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.10.2/p5.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gpu.js@latest/dist/gpu-browser.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="styles/style.css">
+  <link rel="stylesheet" type="text/css" href="styles/editor.css">
+  <link rel="stylesheet" type="text/css" href="styles/example.css">
+  <link rel="stylesheet" type="text/css" href="styles/preview.css">
+  <meta charset="utf-8" />
+
+</head>
+
+<body>
+
+  <div class="logo">type.ai</div>
+
+  <div class="app">
+    <div class="main">
+      <div class="editor">
+        <p class="title">Editor</p>
+        <div class="toolbar">
+          <label for="file-upload" class="upload level-2">
+            Upload
+          </label>
+          <button class="pen margin-left active">Pen</button>
+          <button class="erasor margin-right">Erasor</button>
+          <button class="clear margin-right">Clear</button>
+          <button class="add level-1">Add to examples</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="example">
+        <p class="title">Style Examples</p>
+        <div class="img-list">
+          <p class="tip">Add font images that you like from the editor :)</p>
+        </div>
+      </div>
+
+      <div class="preview">
+        <p class="title">Font Preview</p>
+        <select class="preview-mode">
+          <option value="uppercase">Uppercase letters</option>
+          <option value="lowercase">Lowercase letters</option>
+          <option value="symbols">Symbols</option>
+        </select>
+        <img id="preview"/>
+        <div class='buttons'>
+          <button class="generate">Generate</button>
+          <button class="download">Download</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="nn.js"></script>
+  <script src="imagecell.js"></script>
+  <script src="grid.js"></script>
+  <script src="sketch.js"></script>
+
+</body>
+
+</html>

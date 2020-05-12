@@ -1,0 +1,57 @@
+.example {
+    height: calc(55% - 20px);
+    border: 2px solid #303540;
+    border-radius: 5px;
+    margin: 10px;
+    box-shadow: 2px 2px 0px 0px rgba(0, 0, 0, 0.4);
+}
+
+.tip {
+    color: #bbb;
+}
+
+.example .img-list {
+    display: block;
+    text-align: left;
+    margin: 10px;
+    padding: 10px;
+    height: calc(100% - 80px);
+    overflow: auto !important;
+}
+
+.img-list .img-element {
+    display: inline-block;
+    margin-right: 6px;
+    margin-top: 0px;
+    width: 60px;
+    height: 60px;
+    background: white;
+    border: 2px solid #303540;
+    border-radius: 5px;
+    box-shadow: 0px 2px 0px 0px rgba(0, 0, 0, 0.4);
+}
+
+.img-element:hover {
+    cursor: pointer;
+}
+
+.img-element img {
+    display: block;
+    position: relative;
+    width: 99%;
+    height: 99%;
+}
+
+.img-element .delete {
+    visibility: hidden;
+    position: relative;
+    display: block;
+    top: -50%;
+}
+
+.img-element:hover .delete {
+    visibility: visible;
+    position: relative;
+    display: block;
+    top: -50%;
+}
