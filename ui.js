@@ -54,6 +54,7 @@ class Preview {
         let size = select('#preview').size();
         this.width = size.width;
         this.height = size.height;
+        this.dataURL = '';
     }
 
     drawProgress(percent) {
@@ -79,7 +80,9 @@ class Preview {
             this.canvas.text('Loading neural network...', this.width / 2, this.height / 2 - 15);
         }
         select('#preview').attribute('src', this.canvas.canvas.toDataURL());
+        this.dataURL = this.canvas.canvas.toDataURL();
         this.canvas.remove();
+        this.canvas = null;
     }
 
     makeImage(mat) {
@@ -120,6 +123,8 @@ class Preview {
         this.canvas.image(image4, offx + size, offy + size);
 
         select('#preview').attribute('src', this.canvas.canvas.toDataURL());
+        this.dataURL = this.canvas.canvas.toDataURL();
         this.canvas.remove();
+        this.canvas = null;
     }
 }
