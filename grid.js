@@ -10,10 +10,9 @@ class GridCell {
     }
 
     hit() {
-        if (mouseX >= this.xoff + this.x * this.width && 
-            mouseX <= this.xoff + this.x * this.width + this.width &&
-            mouseY >= this.yoff + this.y * this.width && 
-            mouseY <= this.yoff + this.y * this.width + this.width) {
+        let x = int( (mouseX - this.xoff) / this.width );
+        let y = int( (mouseY - this.yoff) / this.width );
+        if (abs( this.x - x) <= 1 && abs( this.y - y) <= 1){
             return true;
         }
         return false;

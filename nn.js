@@ -1,3 +1,5 @@
+gpu = new GPU();
+
 function generateMatrix(rows, cols, val) {
     const matrix = [];
     for (let row = 0; row < rows; row++) {
@@ -66,12 +68,11 @@ function reshapeMatrix(mat, rows, cols) {
 function averageMatrices(matrices) {
     let rows = matrices[0].length;
     let cols = matrices[0][0].length;
-    let gpu = new GPU();
-
+    
     let add = gpu.createKernel(function (a, b) {
         return a[this.thread.y][this.thread.x] + b[this.thread.y][this.thread.x];
     }).setOutput({ x: cols, y: rows});
-
+    
     let div = gpu.createKernel(function (a, val) {
         return a[this.thread.y][this.thread.x] / val;
     }).setOutput({ x: cols, y: rows});
@@ -81,6 +82,23 @@ function averageMatrices(matrices) {
         sum = add(sum, matrices[i]);
     }
     return div(sum, matrices.length);
+}
+
+function normalizeMatrix(mat) {
+    let maxNum = Number.MIN_SAFE_INTEGER;
+    
+    for (let row = 0; row < mat.length; row++) {
+        for (let col = 0; col < mat[0].length; col++) {
+            maxNum = mat[row][col] > maxNum ? mat[row][col] : maxNum;
+        }
+    }
+
+    for (let row = 0; row < mat.length; row++) {
+        for (let col = 0; col < mat[0].length; col++) {
+            mat[row][col] = mat[row][col] / maxNum;
+        }
+    }
+    return mat;
 }
 
 class FontVAE {
