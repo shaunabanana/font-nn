@@ -287,7 +287,6 @@ class FontVAE {
                         this.fc21w = transposeMatrix(this.fc21w);
                         this.fc22w = transposeMatrix(this.fc22w);
                         this.fc4w = transposeMatrix(this.fc4w);
-                        this.finished = true;
                     } else {
                         this.loadFiles();
                     }
@@ -320,6 +319,9 @@ class FontVAE {
 
     draw () {
         preview.drawProgress(this.percent);
+        if (this.files.length <= 0) {
+            this.finished = true;
+        }
     }
 
 }
