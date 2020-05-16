@@ -79,6 +79,7 @@ class Grid {
         for (var i = 0; i < 64; i++) {
             for (var j = 0; j < 64; j++) {
                 this.grid[i][j].value = mat[i][j];
+                this.grid[i][j].dirty = true;
             }
         }
     }
