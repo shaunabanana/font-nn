@@ -114,11 +114,22 @@ function generateFont() {
 }
 
 function draw() {
-    background(255);
 
     grid.draw();
 
     if (!nn.finished) {
         nn.draw();
     }
+}
+
+function mousePressed() {
+    grid.brush();
+}
+
+function mouseMoved() {
+    grid.brush();
+}
+
+function mouseDragged() {
+    grid.brush();
 }

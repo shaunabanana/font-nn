@@ -60,7 +60,7 @@ class Preview {
     drawProgress(percent) {
         this.canvas = createGraphics(this.width, this.height);
         this.canvas.background(255);
-        if (percent > 0.99) {
+        if (percent > 0.999) {
             this.canvas.fill(48, 53, 64);
             this.canvas.noStroke();
             this.canvas.textAlign(CENTER, CENTER);

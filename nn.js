@@ -319,7 +319,7 @@ class FontVAE {
 
     draw () {
         preview.drawProgress(this.percent);
-        if (this.files.length <= 0) {
+        if (this.files.length <= 0 && focused) {
             this.finished = true;
         }
     }

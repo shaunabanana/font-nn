@@ -7,6 +7,8 @@ class GridCell {
         this.value = 0;
         this.xoff = xoff;
         this.yoff = yoff;
+        this.active = false;
+        this.dirty = true;
     }
 
     hit() {
@@ -19,22 +21,33 @@ class GridCell {
     }
 
     draw() {
-        if (this.hit()) {
-            if (mouseIsPressed) {
-                if (cursorMode == 'draw') {
-                    this.value = 1;
-                } else {
-                    this.value = 0;
-                }
+        if (this.dirty) {
+            this.dirty = false;
+            if (this.active) {
+                strokeWeight(1);
+                stroke(128);
+            } else {
+                strokeWeight(1);
+                stroke(240);
             }
-            strokeWeight(1);
-            stroke(128);
-        } else {
-            strokeWeight(1);
-            stroke(240);
+            fill((1 - this.value) * 255);
+            rect(this.x * this.width, this.y * this.width, this.width, this.width);
         }
-        fill((1 - this.value) * 255);
-        rect(this.x * this.width, this.y * this.width, this.width, this.width);
+        
+    }
+
+    setActive(val) {
+        this.dirty = true;
+        this.active = val;
+    }
+
+    paint() {
+        this.dirty = true;
+        if (cursorMode == 'draw') {
+            this.value = 1;
+        } else {
+            this.value = 0;
+        }
     }
 
 }
@@ -54,6 +67,8 @@ class Grid {
             this.grid.push(row);
         }
         this.currentHit = null;
+        this.lastMouseX = 0;
+        this.lastMouseY = 0;
     }
 
     set(x, y, value) {
@@ -86,12 +101,56 @@ class Grid {
         for (var i = 0; i < 64; i++) {
             for (var j = 0; j < 64; j++) {
                 this.grid[i][j].draw();
-                if (this.grid[i][j].hit()) {
-                    this.dirty = true;
-                    this.currentHit = [i, j];
-                }
             }
         }
         pop();
+    }
+
+    setBrush(x, y, val, paint) {
+        this.grid[y][x].setActive(val);
+        if (paint) this.grid[y][x].paint();
+        if (x > 0) {
+            this.grid[y][x - 1].setActive(val);
+            if (paint) this.grid[y][x - 1].paint();
+            if (y > 0) {
+                this.grid[y - 1][x - 1].setActive(val);
+                if (paint) this.grid[y - 1][x - 1].paint();
+            }
+            if (y < 63) {
+                this.grid[y + 1][x - 1].setActive(val);
+                if (paint) this.grid[y + 1][x - 1].paint();
+            }
+        }
+        if (x < 63) {
+            this.grid[y][x + 1].setActive(val);
+            if (paint) this.grid[y][x + 1].paint();
+            if (y > 0) {
+                this.grid[y - 1][x + 1].setActive(val);
+                if (paint) this.grid[y - 1][x + 1].paint();
+            }
+            if (y < 63) {
+                this.grid[y + 1][x + 1].setActive(val);
+                if (paint) this.grid[y + 1][x + 1].paint();
+            }
+        }
+        if (y > 0) {
+            this.grid[y - 1][x].setActive(val);
+            if (paint) this.grid[y - 1][x].paint();
+        }
+        if (y < 63) {
+            this.grid[y + 1][x].setActive(val);
+            if (paint) this.grid[y + 1][x].paint();
+        }
+    }
+
+    brush() {
+        let x = int( (mouseX - this.x) / this.size );
+        let y = int( (mouseY - this.y) / this.size );
+        if (x >= 0 && x < 64 && y >= 0 && y < 64) {
+            this.setBrush(this.lastMouseX, this.lastMouseY, false, mouseIsPressed);
+            this.setBrush(x, y, true);
+            this.lastMouseX = x;
+            this.lastMouseY = y;
+        }
     }
 }
