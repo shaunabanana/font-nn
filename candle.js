@@ -1,4 +1,4 @@
-const gpu = new GPU({mode: 'dev'});
+const gpu = new GPU();
 
 let config = {
     dynamicOutput: true, 
