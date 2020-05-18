@@ -127,7 +127,7 @@ function generateFont() {
 
 function draw() {
 
-    if (!loader.finished) preview.drawProgress(loader.percent);
+    if (!loader.finished || !focused) preview.drawProgress(loader.percent);
 
     grid.draw();
 }

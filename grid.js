@@ -107,40 +107,17 @@ class Grid {
         pop();
     }
 
-    setBrush(x, y, val, paint) {
+    setBrush(x, y, val, paint, range) {
         this.grid[y][x].setActive(val);
         if (paint) this.grid[y][x].paint();
-        if (x > 0) {
-            this.grid[y][x - 1].setActive(val);
-            if (paint) this.grid[y][x - 1].paint();
-            if (y > 0) {
-                this.grid[y - 1][x - 1].setActive(val);
-                if (paint) this.grid[y - 1][x - 1].paint();
+
+        for (var offx = -range; offx <= range; offx ++) {
+            for (var offy = -range; offy <= range; offy ++) {
+                let xPos = constrain(x + offx, 0, 63);
+                let yPos = constrain(y + offy, 0, 63);
+                this.grid[yPos][xPos].setActive(val);
+                if (paint) this.grid[yPos][xPos].paint();
             }
-            if (y < 63) {
-                this.grid[y + 1][x - 1].setActive(val);
-                if (paint) this.grid[y + 1][x - 1].paint();
-            }
-        }
-        if (x < 63) {
-            this.grid[y][x + 1].setActive(val);
-            if (paint) this.grid[y][x + 1].paint();
-            if (y > 0) {
-                this.grid[y - 1][x + 1].setActive(val);
-                if (paint) this.grid[y - 1][x + 1].paint();
-            }
-            if (y < 63) {
-                this.grid[y + 1][x + 1].setActive(val);
-                if (paint) this.grid[y + 1][x + 1].paint();
-            }
-        }
-        if (y > 0) {
-            this.grid[y - 1][x].setActive(val);
-            if (paint) this.grid[y - 1][x].paint();
-        }
-        if (y < 63) {
-            this.grid[y + 1][x].setActive(val);
-            if (paint) this.grid[y + 1][x].paint();
         }
     }
 
@@ -148,8 +125,8 @@ class Grid {
         let x = int( (mouseX - this.x) / this.size );
         let y = int( (mouseY - this.y) / this.size );
         if (x >= 0 && x < 64 && y >= 0 && y < 64) {
-            this.setBrush(this.lastMouseX, this.lastMouseY, false, mouseIsPressed);
-            this.setBrush(x, y, true);
+            this.setBrush(this.lastMouseX, this.lastMouseY, false, false, 2);
+            this.setBrush(x, y, true, mouseIsPressed, 1);
             this.lastMouseX = x;
             this.lastMouseY = y;
         }

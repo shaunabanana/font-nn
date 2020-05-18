@@ -44,18 +44,8 @@ let vae = new FontVAE();
 
 let loader = new Loader('weights');
 loader.load(vae, function () {
-    // let z = new Tensor(1, 126).fill(0);
-    // z.set(1, 0, 64);
-    // let recon = vae.decode(z);
-    // let h = vae.proj_z.forward(z).transpose(0, 1).unsqueeze(2);
-    // h = vae.uconv1.forward(h);
-    // h = ReLU(vae.uconv2.forward(h));
-    // h = ReLU(vae.uconv3.forward(h));
-    let img = new Tensor(1024, 1, 1).fill(1);
-    let h = ReLU(vae.uconv1.forward(img));
-    console.log(h);
-    h = vae.uconv2.forward(h);
-    console.log(h);
+    console.log('NN Loaded!');
+    preview.drawProgress(1);
 });
 
 window.loader = loader;
