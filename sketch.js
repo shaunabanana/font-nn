@@ -5,8 +5,6 @@ function setup() {
     previewMode = 'uppercase';
 
     preview = new Preview();
-    nn = new FontVAE();
-    nn.loadFiles();
 
     grid = new Grid(0, 0, 7);
     samples = [];
@@ -73,14 +71,25 @@ function uploadImage(image) {
     }
 }
 
-function generateFont() {
-    if (!nn.finished || samples.length == 0) return;
-    let styles = [];
-    for (var i in samples) {
-        let img = samples[i].matrix;
-        styles.push(nn.encode(img));
+function imageFromTensor(rows, cols, tensor) {
+    const matrix = [];
+    for (let row = 0; row < rows; row++) {
+        matrix.push([]);
+        for (let col = 0; col < cols; col++) {
+            matrix[row].push(tensor.get(0, row, col));
+        }
     }
-    let style = averageMatrices(styles);
+    return matrix
+}
+
+function generateFont() {
+    if (samples.length == 0) return;
+    let style = new Tensor(1, 64).fill(0);
+    for (var i in samples) {
+        let img = Tensor.fromArray(samples[i].matrix).unsqueeze(0);
+        style = style.add(vae.encode(img).mu);
+    }
+    style = style.div(samples.length);
 
     let chars;
     if (previewMode == 'uppercase') {
@@ -107,19 +116,20 @@ function generateFont() {
     }
     let images = [];
     chars.forEach(function(char) {
-        z = [[...style[0]].concat(char)];
-        images.push(nn.decode(z));
+        z = Tensor.fromArray([[...style.T].concat(char)]);
+        images.push(
+            imageFromTensor(64, 64, vae.decode(z))
+        );
     })
+    
     preview.drawImages(images);
 }
 
 function draw() {
 
-    grid.draw();
+    if (!loader.finished) preview.drawProgress(loader.percent);
 
-    if (!nn.finished) {
-        nn.draw();
-    }
+    grid.draw();
 }
 
 function mousePressed() {
