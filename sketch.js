@@ -3,6 +3,7 @@ function setup() {
     select('.editor').child(canvas);
     cursorMode = 'draw';
     previewMode = 'uppercase';
+    progressFinished = false;
 
     preview = new Preview();
 
@@ -127,7 +128,12 @@ function generateFont() {
 
 function draw() {
 
-    if (!loader.finished || !focused) preview.drawProgress(loader.percent);
+    if (!loader.finished || !focused) {
+        if (!progressFinished) {
+            preview.drawProgress(loader.percent);
+            if (loader.finished) progressFinished = true;
+        }
+    }
 
     grid.draw();
 }
