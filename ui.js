@@ -57,14 +57,14 @@ class Preview {
         this.dataURL = '';
     }
 
-    drawProgress(percent) {
+    drawProgress(percent, progressText, successText) {
         this.canvas = createGraphics(this.width, this.height);
         this.canvas.background(255);
         if (percent > 0.999) {
             this.canvas.fill(48, 53, 64);
             this.canvas.noStroke();
             this.canvas.textAlign(CENTER, CENTER);
-            this.canvas.text('Neural network loaded!', this.width / 2, this.height / 2);
+            this.canvas.text(successText, this.width / 2, this.height / 2);
         } else {
             this.canvas.stroke(48, 53, 64);
             this.canvas.fill(200);
@@ -77,7 +77,7 @@ class Preview {
             this.canvas.fill(48, 53, 64);
             this.canvas.noStroke();
             this.canvas.textAlign(CENTER, BOTTOM);
-            this.canvas.text('Loading neural network...', this.width / 2, this.height / 2 - 15);
+            this.canvas.text(progressText, this.width / 2, this.height / 2 - 15);
         }
         select('#preview').attribute('src', this.canvas.canvas.toDataURL());
         this.dataURL = this.canvas.canvas.toDataURL();

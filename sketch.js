@@ -34,9 +34,45 @@ function setup() {
 
     select('.generate').mousePressed(generateFont);
 
-    select('.download').mousePressed(function () {
-        downloadURI(preview.dataURL, 'font.png');
-    });
+    select('.download').mousePressed(downloadFont);
+}
+
+function downloadFont() {
+    if (samples.length == 0) return;
+    graphic = createGraphics(64 * 8, 64 * 8);
+    graphic.background(255);
+
+    let style = new Tensor(1, 64).fill(0);
+    for (var i in samples) {
+        let img = Tensor.fromArray(samples[i].matrix).unsqueeze(0);
+        style = style.add(vae.encode(img).mu);
+    }
+    style = style.div(samples.length);
+
+    let chars = [];
+    let charids = [...new Array(62).keys()];
+    for (charid of charids) {
+        chars.push(onehot(charid, 62));
+    }
+
+    let drawOneFont = function (graphic, chars, i) {
+        z = Tensor.fromArray([[...style.T].concat(chars[i])]);
+        let img = preview.makeImage(
+            imageFromTensor(64, 64, vae.decode(z))
+        );
+        graphic.image(img, 64 * (i % 8), 64 * int(i / 8));
+        preview.drawProgress((i + 1) / 62, 'Generating characters...', 'Done!');
+
+        if (i + 1 < chars.length) {
+            setTimeout(drawOneFont.bind(null, graphic, chars, i + 1), 50);
+        } else {
+            downloadURI(graphic.canvas.toDataURL(), 'font.png');
+            graphic.remove();
+            graphic = null;
+        }
+        
+    }
+    drawOneFont(graphic, chars, 0);
 }
 
 function downloadURI(uri, name) {
@@ -125,7 +161,7 @@ function draw() {
 
     if (!loader.finished || !focused) {
         if (!progressFinished) {
-            preview.drawProgress(loader.percent);
+            preview.drawProgress(loader.percent, 'Loading neural network...', 'Neural network loaded!');
             if (loader.finished) progressFinished = true;
         }
     }

@@ -318,7 +318,7 @@ class FontVAE {
     }
 
     draw () {
-        preview.drawProgress(this.percent);
+        preview.drawProgress(this.percent, 'Loading neural network...', 'Neural network loaded!');
         if (this.files.length <= 0 && focused) {
             this.finished = true;
         }
