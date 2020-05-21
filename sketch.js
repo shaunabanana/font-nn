@@ -92,28 +92,23 @@ function generateFont() {
     }
     style = style.div(samples.length);
 
-    let chars;
+    let charids;
+    let chars = [];
     if (previewMode == 'uppercase') {
-        chars = [
-            onehot(2, 62),
-            onehot(4, 62),
-            onehot(19, 62),
-            onehot(20, 62),
-        ];
+        charids = shuffle([...new Array(26).keys()]).slice(0, 4);
+        for (charid of charids) {
+            chars.push(onehot(charid, 62));
+        }
     } else if (previewMode == 'lowercase') {
-        chars = [
-            onehot(2 + 26, 62),
-            onehot(4 + 26, 62),
-            onehot(19 + 26, 62),
-            onehot(20 + 26, 62),
-        ];
+        charids = shuffle([...new Array(26).keys()]).slice(0, 4);
+        for (charid of charids) {
+            chars.push(onehot(charid + 26, 62));
+        }
     } else if (previewMode == 'symbols') {
-        chars = [
-            onehot(54, 62),
-            onehot(57, 62),
-            onehot(59, 62),
-            onehot(61, 62),
-        ];
+        charids = shuffle([...new Array(10).keys()]).slice(0, 4);
+        for (charid of charids) {
+            chars.push(onehot(charid + 26 * 2, 62));
+        }
     }
     let images = [];
     chars.forEach(function(char) {
